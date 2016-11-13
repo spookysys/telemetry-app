@@ -1,2 +1,2 @@
 # Telemetry Dashboard
-Dashboard to view telemetry data in real time
+Dashboard to view telemetry in real time
