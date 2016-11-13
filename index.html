@@ -1,1 +1,56 @@
-hello world 
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+        <style>
+            html,
+            body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            
+            #map {
+                height: 100%;
+            }
+        </style>
+        -->
+        <style type="text/css">
+
+        html,body{
+            height:100%;
+            width:100%;   
+            margin:0;
+            padding:0;
+            border:0;
+        }
+
+        div{
+            margin:0;
+            border:0;
+        }
+
+        .content{
+            display:table;
+            height:100%;
+            width:100%;
+        }
+
+        </style>
+        
+        <title>Telemetry Dashboard</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://www.google.com/jsapi"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1aRDXnO8Vx0EfSyFKBMBp2L6yc1dTqV8&callback=initMap" async defer></script>
+        <script src="scripts/main.js"></script>
+    </head>
+    <body>
+        <div class="content">
+            <div style="height:75%;" id="map"></div>
+            <div style="height:25%;" id="chart"></div>
+        </div>
+    </body>
+</html>
+
