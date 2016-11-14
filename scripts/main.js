@@ -108,7 +108,7 @@ function plotElevation(elevations, status) {
 	// X axis.
 	var data = new google.visualization.DataTable();
 	data.addColumn('string', 'Sample');
-	data.addColumn('number', 'Elevation');
+	data.addColumn('number', 'Altitude');
 	for (var i = 0; i < elevations.length; i++) {
 		data.addRow(['', elevations[i].elevation]);
 	}
