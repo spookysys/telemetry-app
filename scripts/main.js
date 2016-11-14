@@ -127,7 +127,7 @@ function plotElevation(elevations, status) {
 	*/
 
 	// Draw the chart using the data within its DIV.
-	chart.draw(data, {/*height: 150, */title:'Yo', legend: 'none', titleY: 'Elevation (m)'});
+	chart.draw(data, {/*height: 150, */title:'Yo', legend: 'none', titleY: 'Altitude (m)'});
 }
 
 // call drawChart once google charts is loaded
