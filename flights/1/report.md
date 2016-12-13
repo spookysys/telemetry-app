@@ -1,15 +1,17 @@
 # Flight on 13th December 2016
 
-Rocket: 26mm, balsa fins
-Motor: A6-4
-PCB tag: Batch#1
-Code tag: flight-1
+thing|thang
+---|---
+Rocket:|26mm, balsa fins
+Motor:|A6-4
+PCB tag:|Batch#1
+Code tag:|flight-1
 
 Issues:
-* Apoapsis ~2 sec before burn-out, motor too weak to hold speed
+* Apoapsis ~2 sec before burn-out. Motor was too weak to hold speed.
 * Nosecone came loose when parachute opened, fell straight down while body glided away
-* No flight data logged on line - server could not be reached
-* No flight data logged on flash - reboot just before launch because of the missing connection, and initialization did not finish until flight was over
+* No flight data logged on line. Server could not be reached.
+* No flight data logged on flash. Rebooted just before launch because of the missing connection, and initialization did not finish until flight was over.
 
 Things to fix:
 * Change to a more reliable server
@@ -18,4 +20,4 @@ Things to fix:
 * Tie better knots
 
 Logs:
-* flight was in between 46 and 47
+* No interesting logs
