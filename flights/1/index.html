@@ -6,7 +6,7 @@
         <script>
         $(document).ready(function(){
             $.get( "./report.md", function(text) {
-                var converter = new showdown.Converter();
+                var converter = new showdown.Converter({tables: true});
                 var html = converter.makeHtml(text);
                 $( "#content" ).html(html);
             })
