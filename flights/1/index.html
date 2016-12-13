@@ -1,0 +1,62 @@
+<!--
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+        <script type="text/javascript" src="scripts/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="scripts/showdown-1.5.1.min.js"></script>
+    </head>
+    <body>
+        <div id="content">
+            Loading...
+        </div>
+        <script>
+            
+            //var converter = new showdown.Converter();
+            $(document).ready(function() {
+                $.ajax({
+                    url : "./report.md",
+                    dataType: "text",
+                    success : function (text) {
+                        var html = converter.makeHtml(text);
+                        $(".content").html(html);
+                    }
+                });
+                alert("HTML: " + $("#content").html());
+                //$("#content").html("yooyoyoyo whaduuuup");
+            }); 
+        </script>
+    </body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="jquery-3.1.1.js"></script>
+        <script type="text/javascript" src="showdown-1.5.1.min.js"></script>
+        <script>
+        $(document).ready(function(){
+            $.get( "./report.md", function( data ) {
+                alert( "Data Loaded: " + data );
+                $( "#content" ).html( data );
+                alert("changed content");
+            })
+            .done(function() {
+                alert( "second success" );
+            })
+            .fail(function(e) {
+                alert( "error" + e);
+            })
+            .always(function() {
+                alert( "finished" );
+            });
+        });
+        </script>
+    </head>
+    <body>
+
+        <p id="content">This is a paragraph.</p>
+
+    </body>
+</html>
