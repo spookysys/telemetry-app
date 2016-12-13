@@ -33,23 +33,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script type="text/javascript" src="/scripts/jquery-3.1.1.js"></script>
-        <script type="text/javascript" src="/scripts/showdown-1.5.1.min.js"></script>
+        <script type="text/javascript" src="../../scripts/jquery-3.1.1.js"></script>
+        <script type="text/javascript" src="../../scripts/showdown-1.5.1.min.js"></script>
         <script>
         $(document).ready(function(){
-            $.get( "./report.md", function( data ) {
-                alert( "Data Loaded: " + data );
-                $( "#content" ).html( data );
-                alert("changed content");
-            })
-            .done(function() {
-                alert( "second success" );
+            $.get( "./report.md", function(text) {
+                var converter = new showdown.Converter();
+                var html = converter.makeHtml(text);
+                $( "#content" ).html(html);
             })
             .fail(function(e) {
                 alert( "error" + e);
-            })
-            .always(function() {
-                alert( "finished" );
             });
         });
         </script>
