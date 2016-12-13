@@ -1,11 +1,11 @@
 # Flight on 13th December 2016
 
-| thing | thang |
+| Key | Value |
 |-------|-------|
-| Rocket: | 26mm, balsa fins |
-| Motor: | A6-4 |
-| PCB tag: | Batch#1 |
-| Code tag: | flight-1 |
+| Rocket | 26mm, balsa fins |
+| Motor | A6-4 |
+| PCB tag | Batch#1 |
+| Code tag | flight-1 |
 
 Issues
 * Apoapsis ~2 sec before burn-out. Motor was too weak to hold speed.
