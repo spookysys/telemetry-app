@@ -1,15 +1,17 @@
 {
-    "name": "appengine-hello-world",
-    "description": "Simple Hello World Node.js sample for Google App Engine",
+    "name": "telemetry-app",
     "version": "0.0.1",
-    "private": true,
-    "license": "Apache Version 2.0",
-    "author": "Google Inc.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/spookysys/telemetry-app.git"
+    },
     "engines": {
         "node": ">=4.3.2"
     },
     "scripts": {
-        "start": "node app.js"
+        "start": "node app.js",
+        "stop": "",
+        "test": ""
     },
     "dependencies": {
         "express": "4.14.0",
