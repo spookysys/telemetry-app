@@ -24,6 +24,18 @@
             "args": [
                 "docker-compose -f dbg_docker/docker-compose.yml down"
             ]
+        },
+        {
+            "taskName": "compose kill",
+            "args": [
+                "docker-compose -f dbg_docker/docker-compose.yml kill"
+            ]
+        },
+        {
+            "taskName": "compose logs",
+            "args": [
+                "docker-compose -f dbg_docker/docker-compose.yml logs"
+            ]
         }
 
     ]

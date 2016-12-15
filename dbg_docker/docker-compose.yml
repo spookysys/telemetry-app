@@ -9,7 +9,6 @@ services:
       NODE_ENV: development
     ports:
       - 8080:8080
-      - 5858:5858
       - 13610:13610
     volumes:
       - ..:/usr/src/app
