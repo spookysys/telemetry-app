@@ -6,15 +6,15 @@
         "url": "https://github.com/spookysys/telemetry-app.git"
     },
     "engines": {
-        "node": ">=4.3.2"
-    },
-    "scripts": {
-        "start": "node app.js",
-        "stop": "",
-        "test": ""
+        "node": "latest"
     },
     "dependencies": {
-        "express": "4.14.0",
-        "websocket": "1.0.23"
+        "npm": "latest",
+        "@google-cloud/datastore": "latest",
+        "express": "latest",
+        "websocket": "latest"
+    },
+    "devDependencies": {
+        "nodemon": "latest"
     }
 }

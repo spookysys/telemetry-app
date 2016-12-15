@@ -2,7 +2,7 @@
 version: '2'
 
 services:
-  telemetry-app:
+  dbg_docker:
     image: dbg_docker:latest
     build: .
     environment:
@@ -12,4 +12,4 @@ services:
       - 13610:13610
     volumes:
       - ..:/usr/src/app
-    command: node --inspect=13610 --debug-brk --nolazy app.js
+    command: nodemon -L --inspect=13610 --debug --nolazy app.js

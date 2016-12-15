@@ -1,9 +1,13 @@
 'use strict'
+const http = require('http')
+const express = require('express')
+const Datastore = require('@google-cloud/datastore')
+
+const app = express()
+const datastore = Datastore()
+
 
 /*
-const express = require('express')
-const app = express()
-
 app.get('/', (req, res) => {
   res.status(200).send('Hello, world!')
 })
@@ -16,7 +20,36 @@ app.listen(PORT, () => {
 })
 */
 
-var http = require('http')
+function saveEntity(key, data) {
+  const taskKey = datastore.key(key)
+
+  var taskData = [
+    {
+      "name": "created",
+      "value": new Date().toJSON()
+    }
+  ]
+  for (var key in data) {
+    if (data.hasOwnProperty(key)) {
+      taskData.push({ "name": key, "value": data[key] })
+    }
+  }
+
+
+  const entity = {
+    "key": taskKey,
+    "data": taskData
+  }
+
+  return datastore.save(entity)
+    .then(() => {
+      console.log(`Entity ${taskKey.id} created successfully.`)
+      return taskKey
+    })
+}
+
+
+
 
 http.createServer(function (request, response) {
   // Send the HTTP header
@@ -24,10 +57,13 @@ http.createServer(function (request, response) {
   // Content Type: text/plain
   response.writeHead(200, { 'Content-Type': 'text/plain' })
 
-  console.log('tototo')
+  saveEntity('yo', {
+    bjornen: "sover",
+    lune: "hi"
+  })
 
   // Send the response body as "Hello World"
-  response.end('Hello World\n')
+  response.end('Hello Martian\n')
 }).listen(8080)
 
 // Console will print the message

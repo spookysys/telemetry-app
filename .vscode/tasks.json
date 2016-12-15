@@ -3,20 +3,30 @@
     "showOutput": "always",
     "windows": {
         "command": "cmd",
-        "args": [ "/C" ]
+        "args": [
+            "/C"
+        ]
     },
     "linux": {
         "command": "sh",
-        "args": [ "-c" ]
+        "args": [
+            "-c"
+        ]
     },
     "echoCommand": true,
     "suppressTaskName": true,
     "tasks": [
         {
             "taskName": "build",
-            "isBuildCommand": true,
             "args": [
                 "docker-compose -f dbg_docker/docker-compose.yml build"
+            ]
+        },
+        {
+            "isBuildCommand": true,
+            "taskName": "compose up",
+            "args": [
+                "docker-compose -f dbg_docker/docker-compose.yml up --build --force-recreate --remove-orphans"
             ]
         },
         {
@@ -37,6 +47,5 @@
                 "docker-compose -f dbg_docker/docker-compose.yml logs"
             ]
         }
-
     ]
 }

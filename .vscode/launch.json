@@ -12,7 +12,7 @@
             "name": "Run",
             "type": "node2",
             "request": "attach",
-            "preLaunchTask": "compose up detached",
+            //"preLaunchTask": "compose up detached",
             "localRoot": "${workspaceRoot}",
             "remoteRoot": "/usr/src/app",
             "port": 13610
@@ -23,7 +23,8 @@
             "request": "attach",
             "localRoot": "${workspaceRoot}",
             "remoteRoot": "/usr/src/app",
-            "port": 13610
+            "port": 13610,
+            "restart": true
         }
     ]
 }
