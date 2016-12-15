@@ -62,7 +62,6 @@ userServer.get('/log', function (req, res) {
   var data = req.query
   data.created = new Date().toJSON()
   saveDatum(req.query, function (id) {
-    console.log(`Entity ${id} created successfully.`)
     res.send(`Entity ${id} created successfully.`)
   })
 });
