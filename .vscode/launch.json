@@ -9,10 +9,18 @@
             "cwd": "${workspaceRoot}"
         },
         {
-            "name": "Run w/docker",
+            "name": "Run",
             "type": "node2",
             "request": "attach",
-            "preLaunchTask": "compose up",
+            "preLaunchTask": "compose up detached",
+            "localRoot": "${workspaceRoot}",
+            "remoteRoot": "/usr/src/app",
+            "port": 13610
+        },
+        {
+            "name": "Attach",
+            "type": "node2",
+            "request": "attach",
             "localRoot": "${workspaceRoot}",
             "remoteRoot": "/usr/src/app",
             "port": 13610

@@ -13,16 +13,16 @@
     "suppressTaskName": true,
     "tasks": [
         {
-            "taskName": "compose up",
+            "taskName": "build",
             "isBuildCommand": true,
             "args": [
-                "docker-compose -f dbg_docker/docker-compose.yml up -d --force-recreate --remove-orphans"
+                "docker-compose -f dbg_docker/docker-compose.yml build"
             ]
         },
         {
-            "taskName": "compose down",
+            "taskName": "compose up detached",
             "args": [
-                "docker-compose -f dbg_docker/docker-compose.yml down"
+                "docker-compose -f dbg_docker/docker-compose.yml up -d --build --force-recreate --remove-orphans"
             ]
         },
         {
