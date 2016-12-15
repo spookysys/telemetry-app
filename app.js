@@ -1,70 +1,75 @@
 'use strict'
-const http = require('http')
 const express = require('express')
-const Datastore = require('@google-cloud/datastore')
+const websocket = require('websocket');
+const http = require('http')
+const datastore = require('@google-cloud/datastore')()
 
-const app = express()
-const datastore = Datastore()
+var rocketPort = 1337;
+var userPort = 8080;
 
 
-/*
-app.get('/', (req, res) => {
-  res.status(200).send('Hello, world!')
-})
-
-// Start the server
-const PORT = process.env.PORT || 8080
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`)
-  console.log('Press Ctrl+C to quit.')
-})
-*/
-
-function saveEntity(key, data) {
-  const taskKey = datastore.key(key)
-
-  var taskData = [
-    {
-      "name": "created",
-      "value": new Date().toJSON()
-    }
-  ]
+// save entity in cloud so we have it
+function saveDatum(data, cb) {
+  var taskData = []
   for (var key in data) {
     if (data.hasOwnProperty(key)) {
       taskData.push({ "name": key, "value": data[key] })
     }
   }
-
-
-  const entity = {
+  const taskKey = datastore.key("datum")
+  datastore.save({
     "key": taskKey,
     "data": taskData
-  }
-
-  return datastore.save(entity)
-    .then(() => {
-      console.log(`Entity ${taskKey.id} created successfully.`)
-      return taskKey
-    })
+  }).then(() => {
+    cb(taskKey.id)
+  })
 }
 
+// all data
+var all_data = []
 
 
-
-http.createServer(function (request, response) {
-  // Send the HTTP header
-  // HTTP Status: 200 : OK
-  // Content Type: text/plain
+// rocket Server
+var rocketHttpServer = http.createServer(function (request, response) {
   response.writeHead(200, { 'Content-Type': 'text/plain' })
-
-  saveEntity('yo', {
-    bjornen: "sover",
-    lune: "hi"
-  })
-
-  // Send the response body as "Hello World"
   response.end('Hello Martian\n')
-}).listen(8080)
+})
+rocketHttpServer.listen(rocketPort, function () {
+  console.log((new Date()) + " rocket server on port " + rocketPort);
+});
+var rocketWsServer = new websocket.server({
+  httpServer: rocketHttpServer
+});
+rocketWsServer.on('request', function (request) {
+  var connection = request.accept(null, request.origin);
+  connection.on('message', function (message) {
+    if (message.type === 'utf8') {
+      // process WebSocket message
+    }
+  });
+  connection.on('close', function (connection) {
+    // close rocket connection
+  });
+});
 
-// Console will print the message
-console.log('Server running at http://127.0.0.1:8080/')
+
+
+// user Server
+
+var userServer = express();
+
+userServer.get('/log', function (req, res) {
+  var data = req.query
+  data.created = new Date().toJSON()
+  saveDatum(req.query, function (id) {
+    console.log(`Entity ${id} created successfully.`)
+    res.send(`Entity ${id} created successfully.`)
+  })
+});
+
+userServer.listen(userPort);
+
+
+// DONE!
+
+console.log('Running!');
