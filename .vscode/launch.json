@@ -1,21 +1,23 @@
 {
-    // Use IntelliSense to find out which attributes exist for node debugging
-    // Use hover for the description of the existing attributes
-    // For further information visit https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Program",
-            "type": "node2",
+            "name": "Run",
+            "type": "node",
             "request": "launch",
-            "program": "${workspaceRoot}\\app.js",
+            "program": "${workspaceRoot}/app.js",
             "cwd": "${workspaceRoot}"
         },
         {
-            "name": "Attach to Process",
-            "type": "node2",
+            "name": "Attach",
+            "type": "node",
             "request": "attach",
-            "port": 9229
+            //"preLaunchTask": "Compose Up",
+            "localRoot": "${workspaceRoot}",
+            "remoteRoot": "/usr/src/app",
+            "port": 5858,
+            "restart": false,
+            "address": "127.0.0.1"
         }
     ]
 }

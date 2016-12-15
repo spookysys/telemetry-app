@@ -1,0 +1,15 @@
+
+version: '2'
+
+services:
+  telemetry-app:
+    image: dbg_docker:latest
+    build: .
+    environment:
+      NODE_ENV: development
+    ports:
+      - 8080:8080
+      - 5858:5858
+    volumes:
+      - ..:/usr/src/app
+    command: node --debug-brk --nolazy app.js

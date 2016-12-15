@@ -1,9 +1,41 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "0.1.0",
-    "command": "echo",
-    "isShellCommand": true,
-    "args": ["docker", "build", "-t", "${workspaceRootFolderName}", "." , "&&", "docker", "run", "${workspaceRootFolderName}"],
-    "showOutput": "always"
+    "showOutput": "always",
+    "windows": {
+        "command": "cmd",
+        "args": [ "/C" ]
+    },
+    "linux": {
+        "command": "sh",
+        "args": [ "-c" ]
+    },
+    "echoCommand": true,
+    "suppressTaskName": true,
+    "tasks": [
+        {
+            "taskName": "Debug",
+            "args": [
+                "dbg_docker\\run_dbg.bat"
+            ]
+        },
+        {
+            "taskName": "Build",
+            "args": [
+                "dbg_docker\\build.bat"
+            ]
+        },
+        {
+            "taskName": "Compose Up",
+            "args": [
+                "docker-compose -f dbg_docker/docker-compose.debug.yml up"
+            ]
+        },
+        {
+            "taskName": "Compose Down",
+            "args": [
+                "docker-compose -f dbg_docker/docker-compose.debug.yml down"
+            ]
+        }
+
+    ]
 }
