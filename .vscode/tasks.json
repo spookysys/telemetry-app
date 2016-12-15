@@ -13,27 +13,16 @@
     "suppressTaskName": true,
     "tasks": [
         {
-            "taskName": "Debug",
+            "taskName": "compose up",
+            "isBuildCommand": true,
             "args": [
-                "dbg_docker\\run_dbg.bat"
+                "docker-compose -f dbg_docker/docker-compose.yml up -d --force-recreate --remove-orphans"
             ]
         },
         {
-            "taskName": "Build",
+            "taskName": "compose down",
             "args": [
-                "dbg_docker\\build.bat"
-            ]
-        },
-        {
-            "taskName": "Compose Up",
-            "args": [
-                "docker-compose -f dbg_docker/docker-compose.debug.yml up"
-            ]
-        },
-        {
-            "taskName": "Compose Down",
-            "args": [
-                "docker-compose -f dbg_docker/docker-compose.debug.yml down"
+                "docker-compose -f dbg_docker/docker-compose.yml down"
             ]
         }
 

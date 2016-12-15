@@ -10,6 +10,7 @@ services:
     ports:
       - 8080:8080
       - 5858:5858
+      - 13610:13610
     volumes:
       - ..:/usr/src/app
-    command: node --debug-brk --nolazy app.js
+    command: node --inspect=13610 --debug-brk --nolazy app.js

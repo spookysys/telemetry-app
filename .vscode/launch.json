@@ -2,22 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run",
-            "type": "node",
+            "name": "Run locally",
+            "type": "node2",
             "request": "launch",
             "program": "${workspaceRoot}/app.js",
             "cwd": "${workspaceRoot}"
         },
         {
-            "name": "Attach",
-            "type": "node",
+            "name": "Run w/docker",
+            "type": "node2",
             "request": "attach",
-            //"preLaunchTask": "Compose Up",
+            "preLaunchTask": "compose up",
             "localRoot": "${workspaceRoot}",
             "remoteRoot": "/usr/src/app",
-            "port": 5858,
-            "restart": false,
-            "address": "127.0.0.1"
+            "port": 13610
         }
     ]
 }
