@@ -1,0 +1,20 @@
+{
+    "name": "telemetry-app",
+    "version": "0.0.1",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/spookysys/telemetry-app.git"
+    },
+    "engines": {
+        "node": ">=4.3.2"
+    },
+    "scripts": {
+        "start": "node app.js",
+        "stop": "",
+        "test": ""
+    },
+    "dependencies": {
+        "express": "4.14.0",
+        "websocket": "1.0.23"
+    }
+}

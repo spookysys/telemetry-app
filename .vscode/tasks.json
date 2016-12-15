@@ -4,6 +4,6 @@
     "version": "0.1.0",
     "command": "echo",
     "isShellCommand": true,
-    "args": ["docker", "build", "-t", "${workspaceRootFolderName}", "."],
+    "args": ["docker", "build", "-t", "${workspaceRootFolderName}", "." , "&&", "docker", "run", "${workspaceRootFolderName}"],
     "showOutput": "always"
 }
