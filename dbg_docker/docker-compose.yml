@@ -16,3 +16,9 @@ services:
     volumes:
       - ../app:/usr/src/app
     command: nodemon -L --inspect=13610 --debug-brk --nolazy app.js
+  terrain-server:
+    image: geodata/cesium-terrain-server
+    ports:
+      8081:80
+    volumes:
+      - ../assets/terrain:/data/tilesets/terrain
