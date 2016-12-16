@@ -12,7 +12,8 @@
         "npm": "latest",
         "@google-cloud/datastore": "latest",
         "express": "latest",
-        "websocket": "latest"
+        "websocket": "latest",
+        "dgram": "latest"
     },
     "devDependencies": {
         "nodemon": "latest"
