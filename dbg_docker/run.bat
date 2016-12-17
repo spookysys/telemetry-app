@@ -1,1 +1,0 @@
-docker run --rm -it --net=host -v C:\Users\spook\Documents\telemetry-app\app:/usr/src/app app_docker bash

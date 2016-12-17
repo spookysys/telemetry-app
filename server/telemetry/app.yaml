@@ -1,8 +1,5 @@
 runtime: nodejs
 env: flex
-network:
-    name: telemetry
-    instance_tag: telemetry
 resources:
   cpu: .25
   memory_gb: 1.3

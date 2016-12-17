@@ -1,15 +1,7 @@
 {
-    "name": "telemetry-app",
+    "name": "telemetry-server",
     "version": "0.0.1",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/spookysys/telemetry-app.git"
-    },
-    "engines": {
-        "node": "latest"
-    },
     "dependencies": {
-        "npm": "latest",
         "@google-cloud/datastore": "latest",
         "express": "latest",
         "websocket": "latest",
