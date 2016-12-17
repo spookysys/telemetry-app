@@ -1,0 +1,36 @@
+{
+  "name": "telemetry-viewer",
+  "author": "Eivind Liland",
+  "version": "0.0.1",
+  "license": "GNU 3.0",
+  "main": "main.js",
+  "devDependencies": {
+    "beefy": "^2.1.8",
+    "browserify": "^13.1.1",
+    "mocha": "^3.2.0",
+    "rimraf": "^2.5.4",
+    "uglifyify": "^3.0.4",
+    "uglifyjs": "^2.4.10"
+  },
+  "dependencies": {
+    "cesium": "^1.28.0",
+    "jquery": "^3.1.1",
+    "ramda": "^0.20.0"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "uglifyify", [
+          "-c"
+        ]
+      ]
+    ]
+  },
+  "scripts": {
+    "serve": "cd static && beefy ../src/main.js:bundle.js --live",
+    "build:clean": "rimraf build && mkdir build",
+    "build:bundle": "browserify src/main.js | uglifyjs -c > build/bundle.js",
+    "build": "npm run build:clean && npm run build:bundle",
+    "deploy": "gsutil rsync -x \".*\\.js$\" -cdr static gs://telemetry-live.appspot.com && gsutil rsync -cr build gs://telemetry-live.appspot.com && gsutil acl ch -u AllUsers:R gs://telemetry-live.appspot.com/*"
+  }
+}
