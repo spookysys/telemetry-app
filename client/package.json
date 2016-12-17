@@ -1,31 +1,22 @@
 {
-    "name": "telemetry-viewer",
-    "version": "0.0.1",
-    "author": "Eivind Liland",
-    "dependencies": {
-        "cesium": "latest"
-    },
-    "devDependencies": {
-        "gulp-rename": "^1.2.0",
-        "gulp": "^3.8.10",
-        "gulp-mocha-phantomjs": "^0.5.1",
-        "gulp-jshint": "^1.9.0",
-        "gulp-browserify": "^0.5.0",
-        "browserify": "^6.3.4",
-        "browserify-shim": "^3.8.0",
-        "mocha": "^2.0.1",
-        "gulp-minify-css": "^0.3.11",
-        "gulp-uglify": "^1.0.1",
-        "gulp-autoprefixer": "^2.0.0",
-        "gulp-less": "^1.3.6",
-        "chai": "^1.10.0"
-    },
-    "browserify-shim": {
-        "jquery": "$"
-    },
-    "browserify": {
-        "transform": [
-            "browserify-shim"
-        ]
-    }
+  "name": "telemetry-viewer",
+  "author": "Eivind Liland",
+  "version": "0.0.1",
+  "license": "GNU 3.0",
+  "main": "main.js",
+  "devDependencies": {
+    "beefy": "^2.1.8",
+    "browserify": "^13.1.1",
+    "mocha": "^3.2.0",
+    "uglifyjs": "^2.4.10"
+  },
+  "dependencies": {
+    "ramda": "^0.20.0"
+  },
+  "scripts": {
+    "test": "mocha test/",
+    "serve": "beefy main.js:scripts/main.min.js --live",
+    "prebuild": "sh -c \"mkdir -p build/scripts\" ",
+    "build": "browserify main.js | uglifyjs > build/scripts/main.min.js"
+  }
 }

@@ -4,6 +4,10 @@
     "files.eol": "\n",
     // When enabled, will trim trailing whitespace when you save a file.
     "files.trimTrailingWhitespace": true,
+    // The number of spaces a tab is equal to. This setting is overriden based on the file contents when `editor.detectIndentation` is on.
+    "editor.tabSize": 2,
+    // Insert spaces when pressing Tab. This setting is overriden based on the file contents when `editor.detectIndentation` is on.
+    "editor.insertSpaces": true,
     // Format a file on save. A formatter must be available, the file must not be auto-saved, and editor must not be shutting down.
     "editor.formatOnSave": true
 }
