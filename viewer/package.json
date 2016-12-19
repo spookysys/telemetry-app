@@ -1,33 +1,27 @@
 {
   "name": "telemetry-viewer",
-  "author": "Eivind Liland",
   "version": "0.0.1",
-  "license": "GPL-3.0",
-  "devDependencies": {
-    "beefy": "^2.1.8",
-    "browserify": "^13.1.1",
-    "rimraf": "^2.5.4",
-    "uglifyify": "^3.0.4",
-    "uglifyjs": "^2.4.10"
-  },
-  "dependencies": {
-    "cesium": "^1.28.0",
-    "jquery": "^3.1.1"
-  },
-  "browserify": {
-    "transform": [
-      [
-        "uglifyify", [
-          "-c"
-        ]
-      ]
-    ]
-  },
+  "main": "index.js",
   "scripts": {
-    "serve": "cd static && beefy ../src/main.js:bundle.js --live",
-    "build:clean": "rimraf build && mkdir build",
-    "build:bundle": "browserify src/main.js | uglifyjs -c > build/bundle.js",
-    "build": "npm run build:clean && npm run build:bundle",
-    "deploy": "gsutil rsync -x \".*\\.js$\" -cdr static gs://telemetry-live.appspot.com && gsutil rsync -cr build gs://telemetry-live.appspot.com && gsutil acl ch -u AllUsers:R gs://telemetry-live.appspot.com/*"
+    "start": "webpack-dev-server --progress --display-error-details --open",
+    "build:clean": "rm -rf dist && mkdir dist",
+    "build:cesium": "cp -r ./node_modules/cesium/Build/CesiumUnminified/* ./dist",
+    "build:webpack": "webpack --progress --display-error-details",
+    "build": "npm run build:clean && npm run build:cesium && npm run build:webpack",
+    "deploy": "npm run build && gsutil -m rsync -cdr dist gs://telemetry-live.appspot.com"
+  },
+  "author": "Eivind Liland",
+  "license": "GPL-3.0",
+  "dependencies": {},
+  "devDependencies": {
+    "cesium": "^1.28.0",
+    "css-loader": "^0.14.5",
+    "file-loader": "^0.8.5",
+    "html-webpack-plugin": "^1.7.0",
+    "rimraf": "^2.5.4",
+    "script-loader": "^0.6.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
   }
 }
