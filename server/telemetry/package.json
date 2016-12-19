@@ -1,11 +1,11 @@
 {
     "name": "telemetry-server",
     "version": "0.0.1",
+    "license": "GPL-3.0",
     "dependencies": {
         "@google-cloud/datastore": "latest",
-        "express": "latest",
-        "websocket": "latest",
-        "dgram": "latest"
+        "dgram": "latest",
+        "sail": "latest"
     },
     "devDependencies": {
         "nodemon": "latest"

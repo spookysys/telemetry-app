@@ -2,9 +2,12 @@
   "name": "telemetry-app",
   "author": "Eivind Liland",
   "version": "0.0.1",
-  "license": "GNU 3.0",
+  "license": "GPL-3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/spookysys/telemetry-app.git"
+  },
+  "dependencies": {
+    "logger": "0.0.1"
   }
 }
