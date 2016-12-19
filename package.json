@@ -6,8 +6,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/spookysys/telemetry-app.git"
-  },
-  "dependencies": {
-    "logger": "0.0.1"
   }
 }

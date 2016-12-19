@@ -3,7 +3,18 @@
   "author": "Eivind Liland",
   "version": "0.0.1",
   "license": "GPL-3.0",
+  "engines": {
+    "node": ">=6.9.2"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "pre": "beefy index.js:index-bundle.js --live --open"
+  },
   "dependencies": {
-    "gl": "latest"
+    "express": "^4.14.0",
+    "get-pixels": "^3.3.0",
+    "gl": "^4.0.2",
+    "jdataview": "^2.5.0",
+    "save-pixels": "^2.3.4"
   }
 }

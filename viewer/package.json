@@ -2,6 +2,11 @@
   "name": "telemetry-viewer",
   "version": "0.0.1",
   "main": "index.js",
+  "author": "Eivind Liland",
+  "license": "GPL-3.0",
+  "engines": {
+    "node": ">=6.9.2"
+  },
   "scripts": {
     "start": "webpack-dev-server --progress --display-error-details --open",
     "build:clean": "rm -rf dist && mkdir dist",
@@ -10,8 +15,6 @@
     "build": "npm run build:clean && npm run build:cesium && npm run build:webpack",
     "deploy": "npm run build && gsutil -m rsync -cdr dist gs://telemetry-live.appspot.com"
   },
-  "author": "Eivind Liland",
-  "license": "GPL-3.0",
   "dependencies": {},
   "devDependencies": {
     "cesium": "^1.28.0",
