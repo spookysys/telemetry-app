@@ -13,7 +13,7 @@
     "build:cesium": "cp -r ./node_modules/cesium/Build/CesiumUnminified/* ./dist",
     "build:webpack": "webpack --progress --display-error-details",
     "build": "npm run build:clean && npm run build:cesium && npm run build:webpack",
-    "deploy": "npm run build && gsutil -m rsync -cdr dist gs://telemetry-live.appspot.com/viewer"
+    "deploy": "npm run build && gsutil -m rsync -cdr dist gs://telemetry-live.appspot.com/viewer && gsutil acl ch -r -u AllUsers:R gs://telemetry-live.appspot.com/viewer"
   },
   "dependencies": {},
   "devDependencies": {
