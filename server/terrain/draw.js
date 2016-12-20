@@ -47,16 +47,19 @@ function saveContextPng(gl, filename) {
 function createShaderProgram(gl) {
 	var fShaderCode = " \
 			precision mediump float; \
+			varying vec3 colorVarying; \
 			void main(void) { \
-					gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); \
+					gl_FragColor = vec4(colorVarying, 1.0); \
 			} "
 
 	var vShaderCode = " \
-			attribute vec3 vertexPositionAttribute; \
+			attribute vec3 positionAttribute; \
 			uniform mat4 mvMatrixUniform; \
 			uniform mat4 pMatrixUniform; \
+			varying vec3 colorVarying; \
 			void main(void) { \
-					gl_Position = pMatrixUniform * mvMatrixUniform * vec4(vertexPositionAttribute, 1.0); \
+					gl_Position = pMatrixUniform * mvMatrixUniform * vec4(positionAttribute, 1.0); \
+					colorVarying = positionAttribute + vec3(.5,.5,.5); \
 			} "
 
 	var vShader = gl.createShader(gl.VERTEX_SHADER);
@@ -83,8 +86,8 @@ function createShaderProgram(gl) {
 		console.log(gl.getShaderInfoLog(shaderProgram));
 		throw Error("Error creating shader program");
 	}
-	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "vertexPositionAttribute");
-	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+	shaderProgram.positionAttribute = gl.getAttribLocation(shaderProgram, "positionAttribute");
+	gl.enableVertexAttribArray(shaderProgram.positionAttribute);
 	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "pMatrixUniform");
 	shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "mvMatrixUniform");
 
@@ -142,7 +145,7 @@ function drawExample(gl) {
 		gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 
 		gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
-		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.vertexAttribPointer(shaderProgram.positionAttribute, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems);
 	}
 
@@ -153,7 +156,7 @@ function drawExample(gl) {
 		gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 
 		gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
-		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.vertexAttribPointer(shaderProgram.positionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
 	}
 

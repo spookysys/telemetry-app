@@ -6,27 +6,24 @@ const express = require('express')
 const app = express()
 
 // geometry
-const geolib = require('./geolib')
+const draw = require('./draw')
 
 
 
 // render target size
 var terrainTileSize = 256
 
+{
+  var gl = draw.createContext(terrainTileSize, terrainTileSize)
+  draw.drawExample(gl);
+  draw.saveContextPng(gl, "nehe.png")
+}
 
-var gl = geolib.createContext(terrainTileSize, terrainTileSize)
-geolib.drawExample(gl);
-geolib.saveContextPng(gl, "preview.png")
-
-/*
 // main stuff
-geolib.load3ds(__dirname + '/testdata/MIG-21.3ds', function (err, data) {
+draw.load3ds(__dirname + '/testdata/MIG-21.3ds', function (err, data) {
   if (err) throw err
 
-  geolib.draw3ds(gl, data)
-
-  // save image
-  geolib.saveContextPng(gl, "preview.png")
+  var gl = draw.createContext(terrainTileSize, terrainTileSize)
+  draw.draw3ds(gl, data)
+  draw.saveContextPng(gl, "mig.png")
 })
-
-*/
