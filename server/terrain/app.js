@@ -9,30 +9,24 @@ const app = express()
 const geolib = require('./geolib')
 
 
-// image libs
-var createContext = require('gl')
-
 
 // render target size
 var terrainTileSize = 256
 
 
-// Load model
-geolib.loadFile(__dirname + '/testdata/MIG-21.3ds', function (err, data) {
+var gl = geolib.createContext(terrainTileSize, terrainTileSize)
+geolib.drawExample(gl);
+geolib.saveContextPng(gl, "preview.png")
+
+/*
+// main stuff
+geolib.load3ds(__dirname + '/testdata/MIG-21.3ds', function (err, data) {
   if (err) throw err
 
-  // init rendering surface
-  var gl = createContext(terrainTileSize, terrainTileSize, {
-    preserveDrawingBuffer: true
-  })
-  gl.clearColor(1, 0, 0, 1)
-  gl.clear(gl.COLOR_BUFFER_BIT)
-
-  // draw object
-  {
-
-  }
+  geolib.draw3ds(gl, data)
 
   // save image
-  geolib.savePng(gl, terrainTileSize, terrainTileSize, "preview.png")
+  geolib.saveContextPng(gl, "preview.png")
 })
+
+*/
