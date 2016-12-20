@@ -59,7 +59,8 @@ function createShaderProgram(gl) {
 			varying vec3 colorVarying; \
 			void main(void) { \
 					gl_Position = pMatrixUniform * mvMatrixUniform * vec4(positionAttribute, 1.0); \
-					colorVarying = positionAttribute*0.1 + vec3(.5,.5,.5); \
+					float shade = (positionAttribute.z + 2.) / 235.4; \
+					colorVarying = vec3(shade); \
 			} "
 
 	var vShader = gl.createShader(gl.VERTEX_SHADER);
@@ -172,9 +173,9 @@ function draw3ds(gl, data) {
 	// Projection
 	{
 		var pMatrix = mat4.create();
-		var scale = 2500;
-		mat4.ortho(pMatrix, -scale, scale, -scale, scale, 1, 300);
-		mat4.perspective(pMatrix, 45, gl.viewportWidth / gl.viewportHeight, 1, 10000.0);
+		var scale = 5150;
+		mat4.ortho(pMatrix, -scale, scale, -scale, scale, 1, 300.0);
+		//mat4.perspective(pMatrix, 45, gl.viewportWidth / gl.viewportHeight, 1, 30000.0);
 		gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
 	}
 
@@ -244,7 +245,9 @@ function draw3ds(gl, data) {
 		// Draw
 		{
 			var mvMatrix = mat4.create();
-			mat4.lookAt(mvMatrix, [5000, 3600, -1000], [5000, 3600, 0], [0, 1, 0]);
+			mat4.lookAt(mvMatrix, [0, 0, 300], [0, 0, 0], [0, -1, 0]);
+			mat4.rotate(mvMatrix, mvMatrix, -Math.PI / 2, [0, 0, 1]);
+			mat4.translate(mvMatrix, mvMatrix, [-5168.375, -3691.27, 0])
 			gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 
 			gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);

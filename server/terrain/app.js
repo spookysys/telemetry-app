@@ -11,7 +11,7 @@ const draw = require('./draw')
 
 
 // render target size
-var terrainTileSize = 256
+var terrainTileSize = 512
 
 {
   var gl = draw.createContext(terrainTileSize, terrainTileSize)
