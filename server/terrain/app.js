@@ -20,7 +20,7 @@ var terrainTileSize = 256
 }
 
 // main stuff
-draw.load3ds(__dirname + '/testdata/MIG-21.3ds', function (err, data) {
+draw.load3ds(__dirname + '/data/Trondheim_bygg.3DS', function (err, data) {
   if (err) throw err
 
   var gl = draw.createContext(terrainTileSize, terrainTileSize)

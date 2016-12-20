@@ -1,7 +1,7 @@
 var fs = require('fs');
 var ndarray = require("ndarray");
 var savePixels = require("save-pixels");
-var Lib3ds = require('./lib3ds/lib3ds');
+var Lib3ds = require('./lib3ds');
 var glCreateContext = require('gl');
 var mat4 = require('gl-matrix').mat4
 
@@ -13,7 +13,7 @@ function load3ds(filename, cb) {
 			cb(err);
 			return;
 		}
-		var obj = new Lib3ds(null, true);
+		var obj = new Lib3ds(null, false);
 		obj.readFile(data);
 		cb(false, obj);
 	});
@@ -59,7 +59,7 @@ function createShaderProgram(gl) {
 			varying vec3 colorVarying; \
 			void main(void) { \
 					gl_Position = pMatrixUniform * mvMatrixUniform * vec4(positionAttribute, 1.0); \
-					colorVarying = positionAttribute + vec3(.5,.5,.5); \
+					colorVarying = positionAttribute*0.1 + vec3(.5,.5,.5); \
 			} "
 
 	var vShader = gl.createShader(gl.VERTEX_SHADER);
@@ -165,18 +165,46 @@ function drawExample(gl) {
 
 function draw3ds(gl, data) {
 
+	// Shader program
+	var shaderProgram = createShaderProgram(gl);
+	gl.useProgram(shaderProgram);
 
-	// loop over the parsed meshes
+	// Projection
+	{
+		var pMatrix = mat4.create();
+		var scale = 2500;
+		mat4.ortho(pMatrix, -scale, scale, -scale, scale, 1, 300);
+		mat4.perspective(pMatrix, 45, gl.viewportWidth / gl.viewportHeight, 1, 10000.0);
+		gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
+	}
+
+	// create vertexpositionbuffer
+	var vertexPositionBuffer = gl.createBuffer();
+
+	// loop over the parsed meshes and draw them
+	var sceneMax = [-Infinity, -Infinity, -Infinity];
+	var sceneMin = [Infinity, Infinity, Infinity];
 	for (var i = 0; i < data.meshes.length; i++) {
 		var mesh = data.meshes[i]; // a mesh is of type Lib3dsMesh
 
 		// vertices
+		var max = [-Infinity, -Infinity, -Infinity];
+		var min = [Infinity, Infinity, Infinity];
 		for (var j = 0; j < mesh.points; j++) {
 			var vert = mesh.pointL[j]; // a vert is an Array(3)
-			console.log(vert);
+			for (var k = 0; k < 3; k++) {
+				min[k] = Math.min(min[k], vert[k]);
+				max[k] = Math.max(max[k], vert[k]);
+			}
+		}
+		for (var k = 0; k < 3; k++) {
+			sceneMin[k] = Math.min(sceneMin[k], min[k]);
+			sceneMax[k] = Math.max(sceneMax[k], max[k]);
 		}
 
+
 		// faces
+		var vertices = new Float32Array(mesh.faces * 9);
 		for (var j = 0; j < mesh.faces; j++) {
 			var face = mesh.faceL[j] // a face is of type Lib3dsFace
 
@@ -190,11 +218,40 @@ function draw3ds(gl, data) {
 			var v1 = mesh.pointL[idx1];
 			var v2 = mesh.pointL[idx2];
 
+			vertices[j * 9 + 0] = v0[0];
+			vertices[j * 9 + 1] = v0[1];
+			vertices[j * 9 + 2] = v0[2];
+			vertices[j * 9 + 3] = v1[0];
+			vertices[j * 9 + 4] = v1[1];
+			vertices[j * 9 + 5] = v1[2];
+			vertices[j * 9 + 6] = v2[0];
+			vertices[j * 9 + 7] = v2[1];
+			vertices[j * 9 + 8] = v2[2];
+
 			// and the material for the face is:
 			var materialName = face.material;
 			var material = data.materials[materialName];
 			var ambientColor = material.ambientColor;
 			// etc....
+		}
+
+		console.log("verts: " + mesh.points);
+		console.log("faces: " + mesh.faces);
+		console.log("exploded verts: " + vertices.length / 3);
+		console.log("min: " + min);
+		console.log("max: " + max);
+		console.log();
+		// Draw
+		{
+			var mvMatrix = mat4.create();
+			mat4.lookAt(mvMatrix, [5000, 3600, -1000], [5000, 3600, 0], [0, 1, 0]);
+			gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+
+			gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
+			gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+			gl.vertexAttribPointer(shaderProgram.positionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+			gl.drawArrays(gl.TRIANGLES, 0, vertices.length / 3);
 		}
 
 		// texels / uv: guess you can use the face indices above
@@ -205,6 +262,11 @@ function draw3ds(gl, data) {
 			var v = uv[1];
 		}
 	}
+	console.log("sceneMin: " + sceneMin);
+	console.log("sceneMax: " + sceneMax);
+
+	// delete vertexPositionBuffer
+	gl.deleteBuffer(vertexPositionBuffer);
 }
 
 
