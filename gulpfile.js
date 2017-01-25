@@ -70,16 +70,19 @@ gulp.task('html', ['images'], function () {
 
 
 // TypeScript processing
-//var tsProject = ts.createProject();
-//var fileCache = new FileCache();
+var tsProject = ts.createProject("tsconfig.json");
 gulp.task('ts', function () {
 	var out = folder.build + 'js/';
 	var stream = gulp.src(folder.src + 'ts/**/*')
 		.pipe(prune(out))
 		.pipe(newer(out))
 		.pipe(sourcemaps.init())
-		.pipe(ts())
-		.pipe(sourcemaps.write())
+		.pipe(tsProject())
+		.pipe(sourcemaps.write('.', {
+			includeContent: false,
+			destPath: out,
+			sourceRoot: '../../' + folder.src + '/ts'
+		}))
 		.pipe(gulp.dest(out));
 	return stream;
 });
