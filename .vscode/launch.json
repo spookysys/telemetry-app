@@ -8,10 +8,10 @@
 			"name": "Launch Program",
 			"type": "node2",
 			"request": "launch",
-			"program": "${workspaceRoot}/source/ts/HelloWorld.ts",
+			"program": "${workspaceRoot}/bin/www.js",
 			"cwd": "${workspaceRoot}",
 			"outFiles": [
-				"${workspaceRoot}/build/js/*.js"
+				"${workspaceRoot}/dist/**/*.js"
 			],
 			"sourceMaps": true,
 			"preLaunchTask": "build"
