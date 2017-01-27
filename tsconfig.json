@@ -1,8 +1,13 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": true,
-        "sourceMap": true
-    }
+	"files": [
+		"src/**/*.ts"
+	],
+	"compilerOptions": {
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"isolatedModules": false,
+		"target": "es5",
+		"noImplicitAny": true,
+		"sourceMap": true
+	}
 }

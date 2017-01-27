@@ -6,6 +6,7 @@ var
 	gulp = require('gulp'),
 	gutil = require('gulp-util'),
 	newer = require('gulp-newer'),
+	run = require('gulp-run'),
 	//prune = require('gulp-prune'),
 	imagemin = require('gulp-imagemin'),
 	htmlclean = require('gulp-htmlclean'),
@@ -22,7 +23,8 @@ var
 	nodemon = require('gulp-nodemon'),
 	sourcemaps = require('gulp-sourcemaps'),
 	FileCache = require('gulp-file-cache'),
-	ts = require('gulp-typescript')
+	ts = require('gulp-typescript'),
+	replace = require('gulp-replace')
 
 // development mode?
 devBuild = (process.env.NODE_ENV !== 'production'),
@@ -95,11 +97,19 @@ gulp.task('css', ['images'], function () {
 // Copy
 gulp.task('copy', function () {
 	var out = folder.dist;
-	return gulp.src([folder.src + 'app.yaml', folder.src + '**/*.pug'], { "base": folder.src })
+	return gulp.src([folder.src + 'app.yaml', folder.src + 'Dockerfile', folder.src + '.dockerignore', folder.src + '**/*.pug',])
 		.pipe(newer(out))
 		.pipe(gulp.dest(out))
 });
 
+// package.json
+gulp.task('package.json', function () {
+	var out = folder.dist;
+	return gulp.src('package.json')
+		.pipe(newer(out))
+		.pipe(replace(folder.dist, ''))
+		.pipe(gulp.dest(out))
+});
 
 // Javascript
 gulp.task('js', function () {
@@ -107,10 +117,8 @@ gulp.task('js', function () {
 	return gulp.src(folder.src + '**/*.js')
 		.pipe(newer(out))
 		.pipe(sourcemaps.init())
-		.pipe(uglify())
-		.pipe(sourcemaps.write('.', {
-			includeContent: false,
-			destPath: out,
+		//.pipe(uglify())
+		.pipe(sourcemaps.write({
 			sourceRoot: '../' + folder.src
 		}))
 		.pipe(gulp.dest(out))
@@ -125,10 +133,8 @@ gulp.task('ts', function () {
 		.pipe(newer(out))
 		.pipe(sourcemaps.init())
 		.pipe(tsProject())
-		.pipe(uglify())
-		.pipe(sourcemaps.write('.', {
-			includeContent: false,
-			destPath: out,
+		//.pipe(uglify())
+		.pipe(sourcemaps.write({
 			sourceRoot: '../' + folder.src
 		}))
 		.pipe(gulp.dest(out));
@@ -136,14 +142,16 @@ gulp.task('ts', function () {
 });
 
 
+gulp.task('clean', function () {
+	console.log("TODO: Clean");
+});
+
+gulp.task('build', ['package.json', 'copy', 'ts', 'js']);
 
 
-// run all tasks
-gulp.task('real_build', ['copy', 'ts', 'js']);
 
+//gulp.task('default', ['build']);
 
-
-gulp.task('build', ['real_build'])
 
 // // Nodemon
 // gulp.task('watch', ['real_build'], function () {

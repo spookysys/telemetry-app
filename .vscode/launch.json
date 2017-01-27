@@ -14,6 +14,7 @@
 				"${workspaceRoot}/dist/**/*.js"
 			],
 			"sourceMaps": true,
+			"smartStep": true,
 			"preLaunchTask": "build"
 		}
 	]

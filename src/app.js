@@ -1,8 +1,15 @@
 #!/usr/bin/env node
 "use strict";
 
+console.log("Hello this is App yo!");
+
+var exec = require('child_process').execSync;
+exec("ls -la", { stdio: [0, 1, 2] });
+
+
+
 //module dependencies
-var server = require("../dist/server.js");
+var server = require("./server.js");
 var debug = require("debug")("express:server");
 var http = require("http");
 
