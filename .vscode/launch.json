@@ -8,10 +8,10 @@
 			"name": "Launch Program",
 			"type": "node2",
 			"request": "launch",
-			"program": "${workspaceRoot}/dist/app.js",
+			"program": "${workspaceRoot}/app.js",
 			"cwd": "${workspaceRoot}",
 			"outFiles": [
-				"${workspaceRoot}/dist/**/*.js"
+				"${workspaceRoot}/build/**/*.js"
 			],
 			"sourceMaps": true,
 			"smartStep": true,

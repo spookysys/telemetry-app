@@ -1,5 +1,5 @@
 // Ref. https://www.sitepoint.com/introduction-gulp-js/
-// Reg. http://brianflove.com/2016/11/08/typescript-2-express-node/
+// Ref. http://brianflove.com/2016/11/08/typescript-2-express-node/
 
 var
 	// modules
@@ -20,57 +20,42 @@ var
 	autoprefixer = require('autoprefixer'),
 	mqpacker = require('css-mqpacker'),
 	cssnano = require('cssnano'),
-	nodemon = require('gulp-nodemon'),
+	//nodemon = require('gulp-nodemon'),
 	sourcemaps = require('gulp-sourcemaps'),
-	FileCache = require('gulp-file-cache'),
+	//FileCache = require('gulp-file-cache'),
 	ts = require('gulp-typescript'),
-	replace = require('gulp-replace')
+	replace = require('gulp-replace'),
+	del = require('del'),
 
-// development mode?
-devBuild = (process.env.NODE_ENV !== 'production'),
+	// development mode?
+	devBuild = (process.env.NODE_ENV !== 'production'),
 
 	// folders
 	folder = {
 		src: 'src/',
-		dist: 'dist/'
-	};
+		build: 'build/'
+	},
 
-var fileCache = new FileCache();
-
-
-
-// Image processing
-gulp.task('images', function () {
-	var out = folder.dist + 'images/';
-	return gulp.src(folder.src + 'images/**/*')
-		.pipe(newer(out))
-		.pipe(imagemin({ optimizationLevel: 5 }))
-		.pipe(gulp.dest(out));
-});
-
-
-// HTML processing
-gulp.task('html', ['images'], function () {
-	var out = folder.dist + 'html/';
-	return gulp.src(folder.src + 'html/**/*')
-		.pipe(newer(out))
-		.pipe(devBuild ? gutil.noop() : htmlclean())
-		.pipe(gulp.dest(out));
-});
+	// settings
+	config = {
+		project_id: 'telemetry-app-156617',
+		app_id: 'telemetry-app',
+		version: 'dev'
+	}
 
 
 // CSS processing
-gulp.task('css', ['images'], function () {
-	var out = folder.dist + 'css/';
-	return gulp.src(folder.src + 'scss/main.scss')
+gulp.task('css', function () {
+	var out = folder.build;
+	return gulp.src(folder.src + '**/*.scss')
 		.pipe(sass({
 			outputStyle: 'nested',
-			imagePath: 'images/',
+			//imagePath: 'images/',
 			precision: 3,
 			errLogToConsole: true
 		}))
 		.pipe(postcss([
-			assets({ loadPaths: ['images/'] }),
+			//assets({ loadPaths: ['images/'] }),
 			autoprefixer({ browsers: ['last 2 versions', '> 2%'] }),
 			mqpacker,
 			cssnano
@@ -78,62 +63,14 @@ gulp.task('css', ['images'], function () {
 		.pipe(gulp.dest(out));
 });
 
-
-// JavaScript processing
-// var fileCache = new FileCache();
-// gulp.task('js', function () {
-// 	var out = folder.dist + 'js/';
-// 	return gulp.src(folder.src + 'js/**/*')
-// 		.pipe(fileCache.filter())
-// 		.pipe(sourcemaps.init())
-// 		.pipe(concat('main.js'))
-// 		.pipe(devBuild ? gutil.noop() : uglify())
-// 		.pipe(sourcemaps.write())
-// 		.pipe(fileCache.cache())
-// 		.pipe(gulp.dest(out));
-// });
-
-
-// Copy
-gulp.task('copy', function () {
-	var out = folder.dist;
-	return gulp.src([folder.src + 'app.yaml', folder.src + 'Dockerfile', folder.src + '.dockerignore', folder.src + '**/*.pug',])
-		.pipe(newer(out))
-		.pipe(gulp.dest(out))
-});
-
-// package.json
-gulp.task('package.json', function () {
-	var out = folder.dist;
-	return gulp.src('package.json')
-		.pipe(newer(out))
-		.pipe(replace(folder.dist, ''))
-		.pipe(gulp.dest(out))
-});
-
-// Javascript
-gulp.task('js', function () {
-	var out = folder.dist;
-	return gulp.src(folder.src + '**/*.js')
-		.pipe(newer(out))
-		.pipe(sourcemaps.init())
-		//.pipe(uglify())
-		.pipe(sourcemaps.write({
-			sourceRoot: '../' + folder.src
-		}))
-		.pipe(gulp.dest(out))
-});
-
-
 // TypeScript processing
 var tsProject = ts.createProject("tsconfig.json");
 gulp.task('ts', function () {
-	var out = folder.dist;
+	var out = folder.build;
 	var stream = gulp.src(folder.src + '**/*.ts')
 		.pipe(newer(out))
 		.pipe(sourcemaps.init())
 		.pipe(tsProject())
-		//.pipe(uglify())
 		.pipe(sourcemaps.write({
 			sourceRoot: '../' + folder.src
 		}))
@@ -143,40 +80,29 @@ gulp.task('ts', function () {
 
 
 gulp.task('clean', function () {
-	console.log("TODO: Clean");
+	return del(folder.build);
 });
 
-gulp.task('build', ['package.json', 'copy', 'ts', 'js']);
+gulp.task('build', ['ts']);
 
 
+// Build docker locally and deploy
+// (Standard is to build remotely, but this way is more transparent)
+gulp.task('deploy', ['build'], function () {
+	var image_url = 'gcr.io/' + config.project_id + '/' + config.app_id;
+	return run(
+		'docker build -t ' + image_url + ' . && ' +
+		'gcloud docker -- push ' + image_url + ' && ' +
+		'gcloud app --project=' + config.project_id + ' --verbosity=info deploy --image-url=' + image_url + ' --version=' + config.version,
+		{ verbosity: 3 }
+	).exec().pipe(gulp.dest('output'))
+});
 
-//gulp.task('default', ['build']);
-
-
-// // Nodemon
-// gulp.task('watch', ['real_build'], function () {
-// 	return nodemon({
-// 		script: folder.dist + 'js/app.js',
-// 		watch: folder.src,
-// 		tasks: ['build']
-// 	})
-// })
-
-
-// // Nodemon
-// gulp.task('run', ['real_build'], function () {
-// 	return nodemon({
-// 		script: folder.dist + 'js/app.js',
-// 		watch: folder.src,
-// 		tasks: ['build']
-// 	})
-// })
+gulp.task('stop', function () {
+	return run(
+		'gcloud app --project=' + config.project_id + ' versions stop ' + config.version
+	).exec().pipe(gulp.dest('output'))
+});
 
 
-// // watch for changes
-// gulp.task('watch', function () {
-// 	gulp.watch(folder.src + 'images/**/*', ['images']);
-// 	gulp.watch(folder.src + 'html/**/*', ['html']);
-// 	gulp.watch(folder.src + 'js/**/*', ['js']);
-// 	gulp.watch(folder.src + 'scss/**/*', ['css']);
-// });
+gulp.task('default', ['build']);

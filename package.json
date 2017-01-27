@@ -4,9 +4,7 @@
   "version": "0.0.1",
   "license": "GPL-3.0",
   "scripts": {
-    "start": "node ./dist/app.js",
-    "postinstall": "find . -exec chmod 755 {} \\;",
-    "deploy": "cd dist && docker build -t gcr.io/telemetry-app-156617/test . && gcloud docker -- push gcr.io/telemetry-app-156617/test && gcloud app deploy --version test -q --image-url gcr.io/telemetry-app-156617/test"
+    "start": "node ./app.js"
   },
   "repository": {
     "type": "git",
@@ -48,6 +46,7 @@
     "gulp-replace": "^0.5.4",
     "gulp-run": "^1.7.1",
     "gulp-sass": "^3.1.0",
+    "gulp-spawn": "^0.3.0",
     "gulp-strip-debug": "^1.1.0",
     "gulp-typescript": "^3.1.4",
     "gulp-uglify": "^2.0.1",

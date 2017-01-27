@@ -9,7 +9,7 @@ exec("ls -la", { stdio: [0, 1, 2] });
 
 
 //module dependencies
-var server = require("./server.js");
+var server = require("./build/server.js");
 var debug = require("debug")("express:server");
 var http = require("http");
 
