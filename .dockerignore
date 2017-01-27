@@ -21,4 +21,5 @@ gulpfile.js
 tsconfig.json
 Dockerfile
 node_modules
+output
 src

@@ -1,4 +1,4 @@
-Sending build context to Docker daemon 74.24 kB
+Sending build context to Docker daemon 69.12 kB
 Step 1/6 : FROM gcr.io/google_appengine/nodejs
  ---> b68e0828307c
 Step 2/6 : COPY package.json /app/
@@ -8,51 +8,7 @@ Step 3/6 : RUN npm install --unsafe-perm ||   ((if [ -f npm-debug.log ]; then   
  ---> Using cache
  ---> 45714d4fcf95
 Step 4/6 : COPY . /app/
- ---> Using cache
- ---> bde176bf5763
+ ---> 569eca775024
+Removing intermediate container 40d0b1a27a65
 Step 5/6 : RUN find . -exec chmod 755 {} \;
- ---> Using cache
- ---> 5e1b3f9d6117
-Step 6/6 : CMD npm start
- ---> Using cache
- ---> 0c755cd781c9
-Successfully built 0c755cd781c9
-The push refers to a repository [gcr.io/telemetry-app-156617/telemetry-app]
-156b71efba7c: Preparing
-29ad79d23a3e: Preparing
-5bcd470c4347: Preparing
-b743a77f833c: Preparing
-cd8ef1935e00: Preparing
-911ca723c6ef: Preparing
-31118223856b: Preparing
-c9c762006f58: Preparing
-a47e098f88ee: Preparing
-5f70bf18a086: Preparing
-f79f47cdcc87: Preparing
-68def8bcf388: Preparing
-0b81c74723e4: Preparing
-5f70bf18a086: Preparing
-5f70bf18a086: Preparing
-5f70bf18a086: Preparing
-911ca723c6ef: Waiting
-31118223856b: Waiting
-c9c762006f58: Waiting
-a47e098f88ee: Waiting
-5f70bf18a086: Waiting
-f79f47cdcc87: Waiting
-68def8bcf388: Waiting
-0b81c74723e4: Waiting
-b743a77f833c: Layer already exists
-29ad79d23a3e: Layer already exists
-5bcd470c4347: Layer already exists
-cd8ef1935e00: Layer already exists
-156b71efba7c: Layer already exists
-5f70bf18a086: Layer already exists
-a47e098f88ee: Layer already exists
-c9c762006f58: Layer already exists
-31118223856b: Layer already exists
-911ca723c6ef: Layer already exists
-68def8bcf388: Layer already exists
-0b81c74723e4: Layer already exists
-f79f47cdcc87: Layer already exists
-latest: digest: sha256:5f2ee86f4eb7335efeef43bade0927da764a77cde92feb5fc389290818b3ddbe size: 3655
+ ---> Running in d07cf980c87e
