@@ -95,7 +95,7 @@ gulp.task('css', ['images'], function () {
 // Copy
 gulp.task('copy', function () {
 	var out = folder.dist;
-	return gulp.src([folder.src + '**/*.pug'], { "base": folder.src })
+	return gulp.src([folder.src + 'app.yaml', folder.src + '**/*.pug'], { "base": folder.src })
 		.pipe(newer(out))
 		.pipe(gulp.dest(out))
 });
