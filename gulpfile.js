@@ -33,7 +33,9 @@ var
 	// folders
 	folder = {
 		src: 'src/',
-		build: 'build/'
+		build: 'build/',
+		maps: 'maps/',
+		logs: 'logs/'
 	},
 
 	// settings
@@ -46,7 +48,6 @@ var
 
 // CSS processing
 gulp.task('css', function () {
-	var out = folder.build;
 	return gulp.src(folder.src + '**/*.scss')
 		.pipe(sass({
 			outputStyle: 'nested',
@@ -60,27 +61,27 @@ gulp.task('css', function () {
 			mqpacker,
 			cssnano
 		]))
-		.pipe(gulp.dest(out));
+		.pipe(gulp.dest(folder.build));
 });
 
 // TypeScript processing
 var tsProject = ts.createProject("tsconfig.json");
 gulp.task('ts', function () {
-	var out = folder.build;
-	var stream = gulp.src(folder.src + '**/*.ts')
-		.pipe(newer(out))
+	var tsResult = gulp.src(folder.src + '**/*.ts')
+		.pipe(newer(folder.build))
 		.pipe(sourcemaps.init())
-		.pipe(tsProject())
-		.pipe(sourcemaps.write({
-			sourceRoot: '../' + folder.src
+		.pipe(tsProject());
+	// Note: To use inlined maps, remove the directory parameter on sourcemaps.write
+	return tsResult.js
+		.pipe(sourcemaps.write('../' + folder.maps, {
+			sourceRoot: __dirname + '/src'
 		}))
-		.pipe(gulp.dest(out));
-	return stream;
+		.pipe(gulp.dest(folder.build));
 });
 
 
 gulp.task('clean', function () {
-	return del(folder.build);
+	return del([folder.build, folder.maps, folder.logs]);
 });
 
 gulp.task('build', ['ts']);
@@ -95,13 +96,13 @@ gulp.task('deploy', ['build'], function () {
 		'gcloud docker -- push ' + image_url + ' && ' +
 		'gcloud app --project=' + config.project_id + ' --verbosity=info deploy --image-url=' + image_url + ' --version=' + config.version,
 		{ verbosity: 3 }
-	).exec().pipe(gulp.dest('output'))
+	).exec().pipe(gulp.dest(folder.logs))
 });
 
 gulp.task('stop', function () {
 	return run(
 		'gcloud app --project=' + config.project_id + ' versions stop ' + config.version
-	).exec().pipe(gulp.dest('output'))
+	).exec().pipe(gulp.dest(folder.logs))
 });
 
 

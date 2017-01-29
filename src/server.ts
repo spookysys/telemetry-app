@@ -5,7 +5,7 @@ import * as logger from "morgan";
 import * as path from "path";
 import errorHandler = require("errorhandler");
 import methodOverride = require("method-override");
-import { IndexRoute } from "./index";
+import { IndexRoute } from "./subspace/index";
 
 /**
  * The server.

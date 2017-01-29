@@ -3,11 +3,17 @@
 		"src/**/*.ts"
 	],
 	"compilerOptions": {
+		"target": "es5",
 		"module": "commonjs",
 		"moduleResolution": "node",
-		"isolatedModules": false,
-		"target": "es5",
 		"noImplicitAny": true,
-		"sourceMap": true
-	}
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"rootDir": "src",
+		"outDir": "build"
+	},
+	"exclude": [
+		"node_modules"
+	]
 }
