@@ -1,6 +1,9 @@
 {
 	"files": [
-		"src/**/*.ts"
+		"source/**/*.ts"
+	],
+	"exclude": [
+		"node_modules"
 	],
 	"compilerOptions": {
 		"target": "es5",
@@ -10,10 +13,7 @@
 		"removeComments": true,
 		"preserveConstEnums": true,
 		"sourceMap": true,
-		"rootDir": "src",
+		"rootDir": "source",
 		"outDir": "build"
-	},
-	"exclude": [
-		"node_modules"
-	]
+	}
 }

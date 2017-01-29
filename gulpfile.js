@@ -32,7 +32,7 @@ var
 
 	// folders
 	folder = {
-		src: 'src/',
+		src: 'source/',
 		build: 'build/',
 		maps: 'maps/',
 		logs: 'logs/'
@@ -74,7 +74,7 @@ gulp.task('ts', function () {
 	// Note: To use inlined maps, remove the directory parameter on sourcemaps.write
 	return tsResult.js
 		.pipe(sourcemaps.write('../' + folder.maps, {
-			sourceRoot: __dirname + '/src'
+			sourceRoot: __dirname + '/' + folder.src
 		}))
 		.pipe(gulp.dest(folder.build));
 });

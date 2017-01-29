@@ -4,6 +4,9 @@
 	"typescript.check.workspaceVersion": true,
 	"typescript.tsdk": "./node_modules/typescript/lib",
 	"files.exclude": {
-		"node_modules/": true
+		"node_modules/": true,
+		"build/": true,
+		"maps/": true,
+		"LICENSE": true
 	}
 }
