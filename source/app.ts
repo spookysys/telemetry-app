@@ -1,27 +1,32 @@
-import * as Express from 'express';
-import * as ExpressSession from 'express-session';
+import * as express from 'express';
+import * as session from 'express-session';
+import cookieParser = require('cookie-parser');
+import bodyParser = require('body-parser')
 import request = require('request');
 import passport = require('passport');
-import bodyParser = require('body-parser')
 import { Strategy as FacebookStrategy } from 'passport-facebook';
-import Secrets from './Secrets';
 
-var app = Express();
+import secrets = require('./secrets');
+import facebook = require('./facebook');
 
-app.use(Express.static('public'));
-app.use(ExpressSession({
-	secret: Secrets.ExpressSessionSecret,
+
+var app = express();
+app.use(express.static('public'));
+app.use(session({
+	secret: secrets.expressSessionSecret,
 	resave: false,
 	saveUninitialized: true
 }));
+app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json())
-//app.use(bodyParser.json({ type: 'application/*+json' }))
-//app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true });
 app.use(passport.initialize());
 app.use(passport.session());
 
+var users = {}
 
 passport.serializeUser(function (user, done) {
+	console.log("serializeUser: ", user);
 	done(null, user['id']);
 });
 
@@ -30,14 +35,12 @@ passport.deserializeUser(function (id, done) {
 });
 
 passport.use(new FacebookStrategy({
-	clientID: Secrets.FacebookID,
-	clientSecret: Secrets.FacebookSecret,
+	clientID: secrets.facebookAppID,
+	clientSecret: secrets.facebookAppSecret,
 	callbackURL: "http://localhost:8080/auth/facebook_callback"
 },
 	function (accessToken, refreshToken, profile, done) {
-		//if (systemError) return done(systemError, { message: 'Database is offline' });
-		//if (userError) return done(null, false, { message: 'Incorrect password' });
-		return done(null, profile);
+		return done(null, { 'id': profile['id'], 'accessToken': accessToken, 'refreshToken': refreshToken });
 	}
 ));
 
@@ -53,26 +56,13 @@ app.get('/auth/facebook_callback',
 	})
 );
 
-async function getPageAccessToken() {
-
-}
 
 app.get('/auth/success', function (req, res) {
 	res.send('Authentication Success');
 	console.log("Session: ", req.session);
 	console.log("User: ", req.user);
-
-	request({
-		url: `localhost:4444/config`,
-		proxy: 'http://localhost:4444',
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	}, function (err, res, body) {
-		this.config = JSON.parse(body);
-		console.log("response => " + this.config);
-	});
+	console.log(req);
+	main(req.session, req.user);
 });
 
 
@@ -87,3 +77,9 @@ app.listen(app.get('port'), () => {
 	console.log(`App listening on ${app.get('port')}`);
 })
 
+
+
+
+async function main(session, user) {
+	//fb.setAccessToken();
+}
