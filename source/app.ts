@@ -5,10 +5,9 @@ import bodyParser = require('body-parser')
 import request = require('request');
 import passport = require('passport');
 import { Strategy as FacebookStrategy } from 'passport-facebook';
-
 import secrets = require('./secrets');
 import facebook = require('./facebook');
-
+import userdb = require('./userdb');
 
 var app = express();
 app.use(express.static('public'));
@@ -19,26 +18,22 @@ app.use(session({
 }));
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true });
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-var users = {}
 
-passport.serializeUser(function (user, done) {
-	console.log("serializeUser: ", user);
-	done(null, user['id']);
-});
 
-passport.deserializeUser(function (id, done) {
-	done(null, { 'id': id });
-});
+passport.serializeUser(userdb.serializeUser);
 
-passport.use(new FacebookStrategy({
-	clientID: secrets.facebookAppID,
-	clientSecret: secrets.facebookAppSecret,
-	callbackURL: "http://localhost:8080/auth/facebook_callback"
-},
+passport.deserializeUser(userdb.deserializeUser);
+
+passport.use(new FacebookStrategy(
+	{
+		clientID: secrets.facebookAppID,
+		clientSecret: secrets.facebookAppSecret,
+		callbackURL: "http://localhost:8080/auth/facebook_callback"
+	},
 	function (accessToken, refreshToken, profile, done) {
 		return done(null, { 'id': profile['id'], 'accessToken': accessToken, 'refreshToken': refreshToken });
 	}
@@ -61,7 +56,6 @@ app.get('/auth/success', function (req, res) {
 	res.send('Authentication Success');
 	console.log("Session: ", req.session);
 	console.log("User: ", req.user);
-	console.log(req);
 	main(req.session, req.user);
 });
 
