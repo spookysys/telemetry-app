@@ -6,7 +6,8 @@ import request = require('request');
 import passport = require('passport');
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import secrets = require('./secrets');
-import facebook = require('./facebook');
+import config = require('./config');
+import fb = require('./facebook');
 import userdb = require('./userdb');
 
 var app = express();
@@ -56,7 +57,7 @@ app.get('/auth/success', function (req, res) {
 	res.send('Authentication Success');
 	console.log("Session: ", req.session);
 	console.log("User: ", req.user);
-	main(req.session, req.user);
+	return main(req.user, res);
 });
 
 
@@ -74,6 +75,16 @@ app.listen(app.get('port'), () => {
 
 
 
-async function main(session, user) {
-	//fb.setAccessToken();
+async function main(user, res) {
+	fb.get(user['accessToken'], '/me/accounts', function (err, buff) {
+		if (err) console.log("Error!");
+		else {
+			var pages = buff["data"];
+			var page = pages.find(function (x) {
+				return x['id'] == config.livePageID;
+			});
+			console.log('Page access token:', page['access_token']);
+			user['page'] = page;
+		}
+	});
 }

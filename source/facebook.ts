@@ -1,14 +1,8 @@
 import https = require('https');
 
-var accessToken = null;
-
-export function setAccessToken(accessToken_) {
-	accessToken = accessToken_
-}
-
-export function get(apiPath, callback) {
+export function get(accessToken, apiPath, callback, options = { 'parseJson': true }) {
 	// creating options object for the https request
-	var options = {
+	var getOptions = {
 		// the facebook open graph domain
 		host: 'graph.facebook.com',
 
@@ -27,7 +21,7 @@ export function get(apiPath, callback) {
 	var buffer = '';
 
 	// initialize the get request
-	var request = https.get(options, function (result) {
+	var request = https.get(getOptions, function (result) {
 		result.setEncoding('utf8');
 
 		// each data event of the request receiving
@@ -40,14 +34,16 @@ export function get(apiPath, callback) {
 		// all the data received, calling the callback
 		// function with the data as a parameter
 		result.on('end', function () {
-			callback(buffer);
+			if (options['parseJson'])
+				callback(false, JSON.parse(buffer));
+			else
+				callback(false, buffer);
 		});
 	});
 
 	// just in case of an error, prompting a message
 	request.on('error', function (e) {
-		console.log('error from facebook.get(): '
-			+ e.message);
+		console.log(new Error('error from facebook.get(): ' + e.message), null);
 	});
 
 	request.end();
