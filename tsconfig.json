@@ -6,10 +6,10 @@
 		"node_modules"
 	],
 	"compilerOptions": {
-		"target": "es5",
+		"target": "es6",
 		"module": "commonjs",
 		"moduleResolution": "node",
-		"noImplicitAny": true,
+		"noImplicitAny": false,
 		"removeComments": true,
 		"preserveConstEnums": true,
 		"sourceMap": true,

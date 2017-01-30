@@ -8,11 +8,15 @@
 			"name": "Launch Program",
 			"type": "node2",
 			"request": "launch",
+			"env": {
+				"NODE_ENV": "development"
+			},
 			"program": "${workspaceRoot}/build/app.js",
 			"cwd": "${workspaceRoot}",
 			"outFiles": [
 				"${workspaceRoot}/build/**/*.js"
 			],
+			"stopOnEntry": false,
 			"sourceMaps": true,
 			"smartStep": true,
 			"preLaunchTask": "build"
