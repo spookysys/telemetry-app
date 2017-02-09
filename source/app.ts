@@ -1,90 +1,53 @@
+import { livePageID } from './config/public';
+import { expressSessionSecret } from './config/secret';
 import * as express from 'express';
 import * as session from 'express-session';
-import cookieParser = require('cookie-parser');
-import bodyParser = require('body-parser')
-import request = require('request');
-import passport = require('passport');
-import { Strategy as FacebookStrategy } from 'passport-facebook';
-import secrets = require('./secrets');
-import config = require('./config');
-import fb = require('./facebook');
-import userdb = require('./userdb');
+import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
+import * as passport from 'passport';
+import * as auth from './auth/Router';
+import * as fbstream from './fbstream/Router';
 
 var app = express();
 app.use(express.static('public'));
 app.use(session({
-	secret: secrets.expressSessionSecret,
+	secret: expressSessionSecret,
 	resave: false,
 	saveUninitialized: true
 }));
-app.use(cookieParser()); // read cookies (needed for auth)
+app.use(cookieParser());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.set('views', './private/views')
+app.set('view engine', 'pug')
 
+// Add 'auth' folder
+app.use('/auth', auth.Router('/auth', '/fbstream/start'));
 
+// Add 'fbstream' folder
+app.use('/fbstream', fbstream.Router());
 
-passport.serializeUser(userdb.serializeUser);
-
-passport.deserializeUser(userdb.deserializeUser);
-
-passport.use(new FacebookStrategy(
-	{
-		clientID: secrets.facebookAppID,
-		clientSecret: secrets.facebookAppSecret,
-		callbackURL: "http://localhost:8080/auth/facebook_callback"
-	},
-	function (accessToken, refreshToken, profile, done) {
-		return done(null, { 'id': profile['id'], 'accessToken': accessToken, 'refreshToken': refreshToken });
-	}
-));
-
-app.get('/auth/facebook',
-	passport.authenticate('facebook', { scope: ['manage_pages', 'publish_pages'] })
-);
-
-app.get('/auth/facebook_callback',
-	passport.authenticate('facebook', {
-		successRedirect: '/auth/success',
-		failureRedirect: '/auth/facebook',
-		failureFlash: 'Authentication failed'
-	})
-);
-
-
-app.get('/auth/success', function (req, res) {
-	res.send('Authentication Success');
-	console.log("Session: ", req.session);
-	console.log("User: ", req.user);
-	return main(req.user, res);
-});
-
-
-
-
+// Default redirect
 app.get('/', function (req, res) {
-	res.send('<a href="/auth/facebook">Login</a>');
+	res.redirect('/auth/start');
 });
 
-app.set('port', 8080);
-app.listen(app.get('port'), () => {
-	console.log(`App listening on ${app.get('port')}`);
+// test pug
+app.get('/pugtest', function (req, res) {
+	res.render('msg', { title: 'Hey', message: 'Hello there!' })
 })
 
+// Error handler
+app.use(function (err, req, res, next) {
+	console.error(err.stack);
+	res.status(500).render('msg', { title: 'Something broke!', message: err.stack });
+	//next(err); // don't call built-in error handler
+})
+
+// Run server
+app.listen(8080);
 
 
 
-async function main(user, res) {
-	fb.get(user['accessToken'], '/me/accounts', function (err, buff) {
-		if (err) console.log("Error!");
-		else {
-			var pages = buff["data"];
-			var page = pages.find(function (x) {
-				return x['id'] == config.livePageID;
-			});
-			console.log('Page access token:', page['access_token']);
-			user['page'] = page;
-		}
-	});
-}

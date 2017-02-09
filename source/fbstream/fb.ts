@@ -1,5 +1,6 @@
 import https = require('https');
 
+
 export function get(accessToken, apiPath, callback, options = { 'parseJson': true }) {
 	// creating options object for the https request
 	var getOptions = {
@@ -43,7 +44,7 @@ export function get(accessToken, apiPath, callback, options = { 'parseJson': tru
 
 	// just in case of an error, prompting a message
 	request.on('error', function (e) {
-		console.log(new Error('error from facebook.get(): ' + e.message), null);
+		callback(e.message);
 	});
 
 	request.end();
